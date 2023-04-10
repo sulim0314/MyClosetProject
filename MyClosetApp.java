@@ -1,12 +1,8 @@
 package MyProject;
 
 import javax.swing.*;
-
-
-import MyProject.ManagePage;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.*;
 /**
  * --------------------------------------- 
  * @author 고수림
@@ -46,77 +42,19 @@ public class MyClosetApp extends JFrame implements ActionListener {
 		rp.setBackground(new Color(0,0,200,50));
 		lp.setBackground(Color.pink);
 		sp.setBackground(Color.pink);
-		
-		/** 메인 => '옷장에 넣기'
-		 * */
-		m.btRegister.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				card.show(cp,"Register Main Page");
-			}
-		}); 
-		
-		/** 메인 => '옷장에 넣기' => '1. 아우터', '2. 상의', '3. 하의', '4. 신발' 
-		 * */
-		
+
 		rm.btOuter.addActionListener(this);
 		rm.btTop.addActionListener(this);
 		rm.btBottoms.addActionListener(this);
 		rm.btShoes.addActionListener(this);
-
-		/** 메인 <= '옷장에 넣기'	
-		 * */	
-		rm.btBack.addActionListener(new ActionListener() { 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				card.show(cp,"Manage Main Page");
-			}
-		});
 		
-		/**'옷장에 넣기' <= '1. 아우터', '2. 상의', '3. 하의', '4. 신발' 
-		 * */ 		
-		rp.btBack.addActionListener(new ActionListener() { 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				card.show(cp,"Register Main Page");
-			}
-		});
-		
-		/** Main => ListPage 
-		 * */
-		m.btList.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				card.show(cp,"List Page");
-			}
-		}); 
-		/** Main <= ListPage 
-		 * */	
-		lp.btBack.addActionListener(new ActionListener() { 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				card.show(cp,"Manage Main Page");
-				
-			}
-		});
-		
-		/** Main => StylingPage 
-		 * */
-		m.btStyling.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				card.show(cp,"Styling Page");
-			}
-		}); 
-		/** Main <= StylingPage 
-		 * */	
-		sp.btBack.addActionListener(new ActionListener() { 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				card.show(cp,"Manage Main Page");
-				
-			}
-		});
+		rm.btBack.addActionListener(this);
+		rp.btBack.addActionListener(this);
+		m.btRegister.addActionListener(this);
+		m.btList.addActionListener(this);
+		lp.btBack.addActionListener(this);
+		m.btStyling.addActionListener(this);
+		sp.btBack.addActionListener(this);
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	} // -------------------------------------------------------------
@@ -177,26 +115,42 @@ public class MyClosetApp extends JFrame implements ActionListener {
 	        newLabel.setFont(new Font("Serif", Font.BOLD, 50));
 	        rp.add(newLabel, BorderLayout.CENTER);
 	        rp.putClientProperty("currentLabel", newLabel);
-		} 
+	        
+		} else if(e.getSource() == m.btRegister) {
+			card.show(cp,"Register Main Page");
+		} else if (e.getSource() == rm.btBack) {
+			card.show(cp,"Manage Main Page");
+		} else if (e.getSource() == rp.btBack) {
+			card.show(cp,"Register Main Page");
+		} else if (e.getSource() == m.btList) {
+			card.show(cp,"List Page");
+		} else if (e.getSource() == lp.btBack) {
+			card.show(cp,"Manage Main Page");
+		} else if (e.getSource() == m.btStyling) {
+			card.show(cp,"Styling Page");
+		} else if (e.getSource() == sp.btBack) {
+			card.show(cp,"Manage Main Page");
+		}
+
 	}
 
-		/** sort를 다른 클래스에서 가져오기 위한 setSort(), getSort() 메서드
-		 * */
-		public void setSort(String sort) {
-		    this.sort = sort;
-		}	
-		public String getSort() {
-	        return sort;
-	    }
+	/** sort를 다른 클래스에서 가져오기 위한 setSort(), getSort() 메서드
+	* */
+	public void setSort(String sort) {
+		this.sort = sort;
+	}	
+	public String getSort() {
+	    return sort;
+	}
 		
-		/** 인스턴스 생성 메서드 getInstance() 추가하는 메서드
-		 * */ 
-	    public static MyClosetApp getInstance() {
-	        if (instance == null) {
-	            instance = new MyClosetApp();
-	        }
-	        return instance;
+	/** 인스턴스 생성 메서드 getInstance() 추가하는 메서드
+	* */ 
+	public static MyClosetApp getInstance() {
+	    if (instance == null) {
+	    	instance = new MyClosetApp();
 	    }
+	    return instance;
+	}
 		
 	public static void main(String[] args) {
 		MyClosetApp my = MyClosetApp.getInstance();
