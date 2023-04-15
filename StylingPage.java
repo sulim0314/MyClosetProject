@@ -3,6 +3,8 @@ package MyProject;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 import javax.swing.*;
 /**
@@ -14,6 +16,11 @@ import javax.swing.*;
  * --------------------------------------
  */
 public class StylingPage extends JPanel implements ActionListener {
+	ArrayList<String> sortList = new ArrayList<>();
+	
+    ArrayList<String> topName = new ArrayList<>();
+    ArrayList<String> bottomsName = new ArrayList<>();
+    ArrayList<String> shoesName = new ArrayList<>();
 	
 	JLabel lbTitle, lbTitle2;
 	JButton btBack, btRefresh;
@@ -22,7 +29,8 @@ public class StylingPage extends JPanel implements ActionListener {
 	JLabel shoes = new JLabel("");
 	JLabel plus1  = new JLabel("");
 	JLabel plus2  = new JLabel("");
-	
+	MyClosetDAO dao = new MyClosetDAO();
+	MyClosetVO vo = new MyClosetVO();
 	public StylingPage() {
 
 		this.setLayout(null);//레이아웃 해제
@@ -69,12 +77,12 @@ public class StylingPage extends JPanel implements ActionListener {
 	    this.remove(plus1);
 	    this.remove(plus2);
 	    
-	    // ListPage 클래스의 getter 메서드 호출해서 ArrayList 가져오기
-	    ListPage listPage = new ListPage();
-	    ArrayList<String> topName = listPage.getTopName();
-	    ArrayList<String> bottomsName = listPage.getBottomsName();
-	    ArrayList<String> shoesName = listPage.getShoesName();
-	        
+	    try {
+			extractSort(dao.list());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 	    //(상의 + 하의 + 신발)코디를 랜덤으로 추천해주기.
 	    int i = (int)(Math.random() * topName.size());
 	    top.setText("< Top >  "+ topName.get(i));
@@ -105,13 +113,31 @@ public class StylingPage extends JPanel implements ActionListener {
 	    plus2.setFont(new Font("Serif", Font.BOLD, 20));
 
 	}
-	
+	/***/
+	public void extractSort(ArrayList<MyClosetVO> list) {
 
+		for(MyClosetVO vo:list) {
+
+			if(vo.getSort().equals("상의")) {
+	    		topName.add(vo.getName());
+	    	} else if(vo.getSort().equals("하의")) {
+	    		bottomsName.add(vo.getName());
+	    	} else if(vo.getSort().equals("신발")) {
+	    		shoesName.add(vo.getName());
+	    	}
+			
+			
+			
+		}//for-------
+	}
+	
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		recommendation();
 	}
 
 
+	
 	
 }
